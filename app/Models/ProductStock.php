@@ -17,8 +17,6 @@ class ProductStock extends Model
         'qty',
     ];
 
-    // protected $primaryKey = 'product_id';
-
     public function product(){
         return $this->hasOne(Product::class, 'product_id', 'product_id');
     }

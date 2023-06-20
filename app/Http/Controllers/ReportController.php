@@ -55,6 +55,5 @@ class ReportController extends Controller
         $totalProduct = Product::all()->count();
 
         return view('page/report/report', compact(['months', 'incomeData', 'outcomeData', 'totalIncome', 'totalOutcome', 'totalProduct']));
-        // dd($months);
     }
 }

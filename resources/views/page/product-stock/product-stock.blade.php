@@ -6,23 +6,24 @@
             <div class="row px-4 p-2 mb-3">
                 <div class="col-md-6">
                     <h5 class="card-title fw-semibold">Manajemen Stok Produk</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Manajemen Stok Produk yang ada di <b>Koperasi Usaha Bersama</b>.</h6>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Manajemen Stok Produk yang ada di <b>Koperasi
+                            Usaha Bersama</b>.</h6>
                 </div>
                 <div class="col-md-6 d-flex justify-content-end">
                     <div class="row">
                         <div class="col-md">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <input id="search_filter_product_stock" class="form-control me-2" type="search"
+                                placeholder="Cari produk disini" aria-label="Search">
                         </div>
                         <div class="col-md">
-                            <button class="btn btn-primary dropdown-toggle fw-semibold" type="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Category
-                            </button>
-                            <ul class="dropdown-menu">
+                            <select id="category_filter_product_stock" class="form-control">
+                                <option selected disabled>Kategori</option>
+                                <option value="semua">Semua Produk</option>
                                 @foreach($category as $categories)
-                                <li><a class="dropdown-item" href="#">{{$categories}}</a></li>
+                                <option value="{{ $categories }}" class="fw-semibold">{{ $categories }}
+                                </option>
                                 @endforeach
-                            </ul>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -42,7 +43,7 @@
                             <th class="nowrap text-center" scope="col">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="filter_target">
                         @php
                         $i = 1;
                         @endphp
@@ -82,6 +83,78 @@
 </div>
 
 <script>
+$(document).ready(function() {
+    $('#category_filter_product_stock').change(function() {
+        $.ajax({
+            type: 'GET',
+            url: '{{ url("/product/product-filter-category-product-stock") }}',
+            data: {
+                data: $(this).val()
+            },
+            success: function(data) {
+                let num = 1;
+                let result = JSON.parse(data);
+                let results = result.map(function(item) {
+                    var dates = moment(item.created_at).format('D MMMM YYYY');
+                    return `
+                    <tr>
+                        <th scope="row">${num++}</th>
+                        <td>${item.product.product_code}</td>
+                        <td>${item.product.product_name}</td>
+                        <td>${item.qty}</td>
+                        <td>${dates}</td>
+                        <td class="nowrap">
+                            <a onClick="editProductStock('${item.product_id}')"
+                                class="btn btn-warning fw-semibold">Edit</a>
+                        </td>
+                    </tr>
+                    `
+                });
+
+                $('#filter_target').html(results);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    });
+
+    $('#search_filter_product_stock').on('keyup', function() {
+        $.ajax({
+            type: 'GET',
+            url: '{{ url("/product/product-filter-search-product-stock") }}',
+            data: {
+                data: $(this).val()
+            },
+            success: function(data) {
+                let num = 1;
+                let result = JSON.parse(data);
+                let results = result.map(function(item) {
+                    var dates = moment(item.created_at).format('D MMMM YYYY');
+                    return `
+                    <tr>
+                        <th scope="row">${num++}</th>
+                        <td>${item.product.product_code}</td>
+                        <td>${item.product.product_name}</td>
+                        <td>${item.qty}</td>
+                        <td>${dates}</td>
+                        <td class="nowrap">
+                            <a onClick="editProductStock('${item.product_id}')"
+                                class="btn btn-warning fw-semibold">Edit</a>
+                        </td>
+                    </tr>
+                    `
+                });
+
+                $('#filter_target').html(results);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    });
+});
+
 function editProductStock(id) {
     $.get("{{ url('/product/product-stock-edit-import') }}/" + id, {}, function(data, status) {
         $("#imported-page").html(data);
@@ -89,7 +162,7 @@ function editProductStock(id) {
     });
 }
 
-function updateProductStock(id){
+function updateProductStock(id) {
     $.ajax({
         type: 'GET',
         url: '{{ url("/product/product-stock-update-import") }}/' + id,
@@ -99,11 +172,11 @@ function updateProductStock(id){
             price: $('#product_price_update').val(),
             type: 'in'
         },
-        success: function(data){
+        success: function(data) {
             $("#exampleModal").modal('hide');
             window.location.reload();
         },
-        error: function(err){
+        error: function(err) {
             console.log(err);
         }
     });

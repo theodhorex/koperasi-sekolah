@@ -49,16 +49,25 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
         Route::get('/product/product-edit/{id}', 'Product\ProductController@editProduct')->name('product.product-edit');
         Route::get('/product/product-update/{id}', 'Product\ProductController@updateProduct')->name('product.product-update');
         Route::get('/product/product-delete/{id}', 'Product\ProductController@deleteProduct')->name('product.product-delete');
+        // Product Filter
+        Route::get('/product/product-filer-category-product-list', 'Product\ProductController@categoryFilter');
+        Route::get('/product/product-search-filter-product-list', 'Product\ProductController@searchFilter');
+
         // Product Stock
         Route::get('/product/product-stock', 'Product\ProductController@productStock')->name('product.product-stock');
         Route::get('/product/product-stock-edit-import/{id}', 'Product\ProductController@editProductStock')->name('product.product-stock-edit-import');
         Route::get('/product/product-stock-update-import/{id}', 'Product\ProductController@updateProductStock')->name('product.product-stock-update-import');
+        // Product Stock Filter
+        Route::get('/product/product-filter-category-product-stock', 'Product\ProductController@categoryStockFilter');
+        Route::get('/product/product-filter-search-product-stock', 'Product\ProductController@searchStockFilter');
+
         // Cashier
         Route::get('/cashier/cashier-home', 'CashierController@cashier')->name('cashier.cashier-home');
         Route::get('/cashier/cashier-get-product-detail/{id}', 'CashierController@getProductDetail')->name('cashier.cashier-get-product-detail');
         Route::get('/cashier/cashier-get-product-detail-order/{id}', 'CashierController@getProductDetailOrder')->name('cashier.cashier-get-product-detail-order');
 
         Route::get('/cashier/cashier-purchase-order', 'CashierController@purchaseOrder');
+
         // Report
         Route::get('/report/report-page', 'ReportController@index')->name('report.report-page');
     });

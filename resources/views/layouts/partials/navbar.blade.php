@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar p-3 bg-dark navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Koperasi Usaha Bersama</a>
+            <a class="navbar-brand fw-semibold" href="#">Koperasi Usaha Bersama</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="{{ asset('assets/jquery/jquery-3.6.3.min.js') }}"></script>
     <script src="{{ asset('assets/chart js/chart.umd.min.js') }}"></script>
+    <script src="{{ asset('assets/moment/moment-with-locales.js') }}"></script>
     <title>Dashboard</title>
 
     <!-- Material Icon -->

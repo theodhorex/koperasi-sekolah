@@ -12,22 +12,21 @@
                 <div class="col-md-6">
                     <div class="row d-flex align-items-center justify-content-center">
                         <div class="col-md">
-                            <input class="form-control me-2" type="search" placeholder="Cari Produk disini"
-                                aria-label="Search">
+                            <input id="search_filter_product_list" class="form-control me-2" type="search"
+                                placeholder="Cari Produk disini" aria-label="Search">
                         </div>
                         <div class="col-md">
                             <div class="row">
                                 <div class="col-md">
                                     <div class="dropdown">
-                                        <button class="btn btn-primary dropdown-toggle fw-semibold w-100" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            Kategori
-                                        </button>
-                                        <ul class="dropdown-menu">
+                                        <select id="category_filter_product_list" class="form-control">
+                                            <option selected disabled>Kategori</option>
+                                            <option value="semua">Semua Produk</option>
                                             @foreach($category as $categories)
-                                            <li><a class="dropdown-item" href="#">{{$categories}}</a></li>
+                                            <option value="{{ $categories }}" class="fw-semibold">{{ $categories }}
+                                            </option>
                                             @endforeach
-                                        </ul>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md">
@@ -57,25 +56,27 @@
                             <th class="nowrap text-center" scope="col">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @php
-                        $i = 1;
-                        @endphp
-                        @foreach($product_list as $product)
-                        <tr>
-                            <th scope="row">{{ $i++ }}</th>
-                            <td>{{ $product->product_code }}</td>
-                            <td>{{ $product->product_name }}</td>
-                            <td>Rp. {{ number_format($product->price, 2, ',', '.') }}</td>
-                            <td>{{ ($product->created_at)->format('j F Y') }}</td>
-                            <td class="nowrap">
-                                <a onClick="editProduct('{{ $product->product_id }}')"
-                                    class="btn btn-warning fw-semibold">Edit</a>
-                                <a onClick="deleteProduct('{{ $product->product_id }}')"
-                                    class="btn btn-danger fw-semibold">Hapus</a>
-                            </td>
-                        </tr>
-                        @endforeach
+                    <tbody id="filter_target">
+                        <div class="filter_target_body">
+                            @php
+                            $i = 1;
+                            @endphp
+                            @foreach($product_list as $product)
+                            <tr>
+                                <th scope="row">{{ $i++ }}</th>
+                                <td>{{ $product->product_code }}</td>
+                                <td>{{ $product->product_name }}</td>
+                                <td>Rp. {{ number_format($product->price, 2, ',', '.') }}</td>
+                                <td>{{ ($product->created_at)->format('j F Y') }}</td>
+                                <td class="nowrap">
+                                    <a onClick="editProduct('{{ $product->product_id }}')"
+                                        class="btn btn-warning fw-semibold">Edit</a>
+                                    <a onClick="deleteProduct('{{ $product->product_id }}')"
+                                        class="btn btn-danger fw-semibold">Hapus</a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </div>
                     </tbody>
                 </table>
             </div>
@@ -125,7 +126,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel2">Edit Product</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel2">Edit Produk</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="imported-page"></div>
@@ -135,8 +136,85 @@
 
 <script>
 $(document).ready(function() {
+    // Category filter
+    $('#category_filter_product_list').change(function() {
+        $.ajax({
+            type: 'GET',
+            url: '{{ url("/product/product-filer-category-product-list") }}',
+            data: {
+                data: $(this).val()
+            },
+            success: function(data) {
+                let num = 1;
+                let result = JSON.parse(data);
+                let results = result.map(function(item) {
+                    var dates = moment(item.created_at).format('D MMMM YYYY');
+                    return `
+                    <tr>
+                        <th scope="row">${num++}</th>
+                        <td>${item.product_code}</td>
+                        <td>${item.product_name}</td>
+                        <td>Rp. ${(item.price / 1000).toFixed(3) + ',' + '00'}</td>
+                        <td>${dates}</td>
+                        <td class="nowrap">
+                            <a onClick="editProduct('${item.product_id}')"
+                                class="btn btn-warning fw-semibold">Edit</a>
+                            <a onClick="deleteProduct('${item.product_id}')"
+                                class="btn btn-danger fw-semibold">Hapus</a>
+                        </td>
+                    </tr>
+                    `
+                });
 
+                $('#filter_target').html(results);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    });
+
+    // Search filter
+    $('#search_filter_product_list').on('keyup', function() {
+        $.ajax({
+            type: 'GET',
+            url: '{{ url("/product/product-search-filter-product-list") }}',
+            data: {
+                data: $(this).val()
+            },
+            success: function(data) {
+                let num = 1;
+                let result = JSON.parse(data);
+                let results = result.map(function(item) {
+                    var dates = moment(item.created_at).format('D MMMM YYYY');
+                    return `
+                    <tr>
+                        <th scope="row">${num++}</th>
+                        <td>${item.product_code}</td>
+                        <td>${item.product_name}</td>
+                        <td>Rp. ${(item.price / 1000).toFixed(3) + ',' + '00'}</td>
+                        <td>${dates}</td>
+                        <td class="nowrap">
+                            <a onClick="editProduct('${item.product_id}')"
+                                class="btn btn-warning fw-semibold">Edit</a>
+                            <a onClick="deleteProduct('${item.product_id}')"
+                                class="btn btn-danger fw-semibold">Hapus</a>
+                        </td>
+                    </tr>
+                    `
+                });
+
+                $('#filter_target').html(results);
+            },
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    });
 });
+
+// Other Function
+
 // Edit Product
 function editProduct(id) {
     $.get("{{ url('/product/product-edit') }}/" + id, {}, function(data, status) {

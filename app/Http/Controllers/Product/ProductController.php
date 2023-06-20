@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Controller;
 use Uuid;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 // Model
 use App\Models\Product;
@@ -19,7 +20,7 @@ class ProductController extends Controller
         $product_list = Product::latest()->get();
         $category = Product::pluck('product_code')->map(function($item){
             return explode('-', $item)[0];
-        });
+        })->unique();
 
         return view('page/product/product-list', compact(['product_list', 'category']));
     }
@@ -70,14 +71,33 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
+    // Product Filter
+    public function categoryFilter(Request $request){
+        if($request -> data == 'semua'){
+            $result = Product::latest()->get();
+        }else{
+            $result = Product::where('product_code', 'LIKE', '%' . $request -> data . '%')->get();
+        };
+        return json_encode($result);
+    }
+
+    public function searchFilter(Request $request){
+        if($request -> data == ''){
+            $results = Product::latest()->get();
+        }else{
+            $results = Product::where('product_name', 'LIKE', '%' . $request -> data . '%')->get();
+        }
+        return json_encode($results);
+    }
+
+
     // Product Stock
     public function productStock(){
         $product_list = ProductStock::latest()->get();
         $category = Product::pluck('product_code')->map(function($item){
             return explode('-', $item)[0];
-        });
+        })->unique();
 
-        // dd(ProductStock::where('product_id', '3ab2095e-7ed8-4bac-b39d-998aafa68aef')->pluck ('qty'));
         return view('page/product-stock/product-stock', compact(['product_list', 'category']));
     }
 
@@ -104,6 +124,35 @@ class ProductController extends Controller
             'qty' => $request -> product_stock,
             'amount' => $request -> price,
         ]);
+    }
+
+    // Product Stock Filter
+    public function categoryStockFilter(Request $request){
+        if($request -> data == 'semua'){
+            $result = ProductStock::with('product')->latest()->get();
+        }else{
+            $result = ProductStock::with('product')
+                ->whereHas('product', function ($query) use ($request) {
+                    $query->where('product_code', 'LIKE', '%' . $request->data . '%');
+                })
+                ->latest()->get();
+        }
+
+        return json_encode($result);
+    }
+
+    public function searchStockFilter(Request $request){
+        if($request -> data == ''){
+            $results = ProductStock::with('product')->latest()->get();
+        }else{
+            $results = ProductStock::with('product')
+                ->whereHas('product', function ($query) use ($request) {
+                    $query->where('product_name', 'LIKE', '%' . $request->data . '%');
+                })
+                ->get();
+        }
+
+        return json_encode($results);
     }
 
     
