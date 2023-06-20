@@ -71,7 +71,8 @@
                     </div>
                     <hr>
                     <div class="row px-2">
-                        <a onClick="purchaseOrder()" class="btn btn-primary p-2 fw-semibold">Konfirmasi Pembayaran Order</a>
+                        <a onClick="purchaseOrder()" id="purchaseOrderButton"
+                            class="btn btn-primary p-2 fw-semibold">Konfirmasi Pembayaran Order</a>
                     </div>
                 </div>
             </div>
@@ -102,11 +103,37 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary fw-semibold" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" id="addToCartButton" class="btn btn-primary fw-semibold">Tambah ke keranjang</button>
+                <button type="button" id="addToCartButton" class="btn btn-primary fw-semibold">Tambah ke
+                    keranjang</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal Edit Product in Shopping Cart -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="edit_product_name"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md">
+                    <div class="form-group form-floating mb-3">
+                        <input type="text" id="product_amount_in_shopping_cart" class="form-control fw-semibold"
+                            placeholder="Enter the purchase amount" required="required">
+                        <label for="floatingName">Jumlah produk</label>
+                    </div>
+                </div>
+            </div>
+            <div id="modal_footer_product_detail_in_shopping_cart" class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -162,7 +189,7 @@ $(document).ready(function() {
                         <div class="col">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="fw-semibold">${shoppingCart[i].product_name}</h5>
+                                    <h5 class="fw-semibold" style="cursor: pointer;" onClick="editShoppingCart('${shoppingCart[i].product_name}')">${shoppingCart[i].product_name}</h5>
                                 </div>
                                 <div class="col">
                                     <h6 class="fw-semibold float-end">X ${shoppingCart[i].qty}</h6>
@@ -180,6 +207,7 @@ $(document).ready(function() {
                 $('#orderListTotalItem').html('Total Produk: ' + shoppingCart.length);
 
                 calculateSubtotal();
+                $('#purchaseOrderButton').removeClass('disabled');
             }
         }
 
@@ -200,7 +228,83 @@ $(document).ready(function() {
 
         $("#exampleModal").modal('hide');
     });
+
+    if (shoppingCart.length === 0) {
+        $('#purchaseOrderButton').addClass('disabled');
+    }
 });
+
+function editShoppingCart(param) {
+    let result = $.grep(shoppingCart, function(i) {
+        return i.product_name === param
+    });
+    $('#edit_product_name').html(result[0].product_name);
+    $('#product_amount_in_shopping_cart').val(result[0].qty);
+    $('#modal_footer_product_detail_in_shopping_cart').html(
+        `
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <button type="button" onClick="updateShoppingCart('${result[0].product_name}')" class="btn btn-primary">Simpan</button>
+        `
+    );
+    $('#exampleModal2').modal('show');
+    // console.log(result)
+}
+
+function updateShoppingCart(target) {
+    let result = $.grep(shoppingCart, function(i) {
+        return i.product_name == target
+    });
+
+    if (result.length > 0) {
+        let amount = $('#product_amount_in_shopping_cart').val();
+        result[0].qty = parseInt(amount);
+    }
+
+    $('#shopping_cart_view').empty();
+    for (let i = 0; i < shoppingCart.length; i++) {
+        let data = `
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="fw-semibold" style="cursor: pointer;" onClick="editShoppingCart('${shoppingCart[i].product_name}')">${shoppingCart[i].product_name}</h5>
+                                </div>
+                                <div class="col">
+                                    <h6 class="fw-semibold float-end">X ${shoppingCart[i].qty}</h6>
+                                </div>
+                            </div>
+                            <h6>ATK</h6>
+                            <h6>Rp. ${(shoppingCart[i].price / 1000).toFixed(3) + ',' + '00'}</h6>
+                            <h6 class="fw-semibold">
+                                => Rp. ${(shoppingCart[i].qty * shoppingCart[i].price / 1000).toFixed(3) + ',' + '00'}
+                            </h6>
+                        </div>
+                    </div>
+                `;
+        $('#shopping_cart_view').append(data);
+        $('#orderListTotalItem').html('Total Produk: ' + shoppingCart.length);
+
+        calculateSubtotalss();
+        $('#purchaseOrderButton').removeClass('disabled');
+    }
+
+    $('#exampleModal2').modal('hide');
+}
+
+function calculateProductSubtotalss(product) {
+    return product.price * product.qty;
+}
+
+function calculateSubtotalss() {
+    let subtotal = 0;
+
+    for (let i = 0; i < shoppingCart.length; i++) {
+        subtotal += calculateProductSubtotalss(shoppingCart[i]);
+    }
+
+    $('#orderListSubtotalPrice').html('Subtotal: Rp. ' + (subtotal / 1000).toFixed(3) + ',' +
+        '00');
+}
 
 function getProductDetail(id) {
     $.ajax({
