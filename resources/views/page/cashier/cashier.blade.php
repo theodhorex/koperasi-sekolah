@@ -197,9 +197,18 @@ $(document).ready(function() {
                             </div>
                             <h6>ATK</h6>
                             <h6>Rp. ${(shoppingCart[i].price / 1000).toFixed(3) + ',' + '00'}</h6>
-                            <h6 class="fw-semibold">
-                                => Rp. ${(shoppingCart[i].qty * shoppingCart[i].price / 1000).toFixed(3) + ',' + '00'}
-                            </h6>
+                            <div class="row">
+                                <div class="col-md">
+                                    <h6 class="fw-semibold">
+                                        => Rp. ${(shoppingCart[i].qty * shoppingCart[i].price / 1000).toFixed(3) + ',' + '00'}
+                                    </h6>
+                                </div>
+                                <div class="col-md">
+                                    <span style="cursor: pointer;" onClick="removeFromCart('${shoppingCart[i].product_name}')" class="material-icons float-end text-secondary">
+                                        delete
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -289,6 +298,24 @@ function updateShoppingCart(target) {
     }
 
     $('#exampleModal2').modal('hide');
+}
+
+function removeFromCart(param) {
+    let result = $.grep(shoppingCart, function(i) {
+        return i.product_name;
+    });
+
+    if (result.length > 0) {
+        let index = shoppingCart.indexOf(result[0]);
+        shoppingCart.splice(index, 1);
+    }
+
+    $('#shopping_cart_view').html(
+        '<h5 class="fw-semibold text-center my-5">Belum ada produk di keranjang</h5>'
+    );
+    $('#orderListTotalItem').html('Total Produk: 0');
+    $('#orderListSubtotalPrice').html('Subtotal: 0')
+    $('#purchaseOrderButton').addClass('disabled');
 }
 
 function calculateProductSubtotalss(product) {
