@@ -74,7 +74,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Product Stock</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Stok Produk</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="imported-page"></div>
@@ -174,7 +174,18 @@ function updateProductStock(id) {
         },
         success: function(data) {
             $("#exampleModal").modal('hide');
-            window.location.reload();
+            Swal.fire({
+                title: 'Stok produk berhasil diperbarui!',
+                text: "Stok berhasil diperbarui!",
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonColor: '#cb0c9f',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Tutup',
+                cancelButtonText: 'No'
+            }).then(() => {
+                window.location.reload()
+            });
         },
         error: function(err) {
             console.log(err);
