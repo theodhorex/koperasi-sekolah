@@ -246,14 +246,14 @@ function updateProduct(id) {
 // Delete Product
 function deleteProduct(id) {
     Swal.fire({
-        title: 'Are you sure?',
-        text: "This product will be deleted permanently from your database!",
+        title: 'Apakah kamu yakin?',
+        text: "Produk ini akan dihapus secara permanen dari dalam database!",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#cb0c9f',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Tidak'
     }).then((result) => {
         if (result.isConfirmed) {
             url = "/product/product-delete/" + id;

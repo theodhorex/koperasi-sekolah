@@ -7,7 +7,9 @@
     <script src="{{ asset('assets/jquery/jquery-3.6.3.min.js') }}"></script>
     <script src="{{ asset('assets/chart js/chart.umd.min.js') }}"></script>
     <script src="{{ asset('assets/moment/moment-with-locales.js') }}"></script>
-    <title>Dashboard</title>
+    <script src="{{ asset('assets/html2canvas/html2canvas.min.js') }}"></script>
+    <link rel="icon" href="https://www.freeiconspng.com/thumbs/logo-design/blank-bird-logo-design-idea-png-15.png" type="image/x-icon">
+    <title>Koperasi Usaha Bersama</title>
 
     <!-- Material Icon -->
     <link rel="stylesheet" href="{{ asset('assets/icon/MaterialIcon.css') }}">
@@ -52,17 +54,18 @@
 </head>
 
 <body>
-
+    @auth
     @include('layouts.partials.navbar')
+    @endauth
 
     <main class="container">
         @yield('content')
     </main>
- 
+
     <script src="{!! url('assets/bootstrap/js/bootstrap.bundle.min.js') !!}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-   
+
+
 </body>
 
 </html>

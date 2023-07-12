@@ -366,8 +366,8 @@ function purchaseOrder() {
         },
         success: function(data) {
             Swal.fire({
-                title: 'Order purchased successfully!',
-                text: "Your order purchased successfully!",
+                title: 'Pesanan berhasil dibeli!',
+                text: "Pesanan Anda berhasil dibeli!",
                 icon: 'success',
                 showCancelButton: false,
                 confirmButtonColor: '#cb0c9f',

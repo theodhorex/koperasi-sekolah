@@ -55,8 +55,6 @@ class CashierController extends Controller
                 'product_id' => $item['product_id'],
                 'qty' => $item['qty'],
                 'amount' => $item['price'] * $item['qty'],
-                'created_at' => '2023-07-20 06:23:48',
-                'updated_at' => '2023-07-20 06:23:48',
             ]);
 
         }

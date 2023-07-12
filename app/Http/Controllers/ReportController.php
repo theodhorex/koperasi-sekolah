@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use PDF;
+use Illuminate\Support\Facades\View;
+// use mikehaertl\wkhtmlto\Pdf;
 
 // Model
 use App\Models\Product;
@@ -54,6 +58,48 @@ class ReportController extends Controller
 
         $totalProduct = Product::all()->count();
 
-        return view('page/report/report', compact(['months', 'incomeData', 'outcomeData', 'totalIncome', 'totalOutcome', 'totalProduct']));
+
+        $totalSoldProductThisMonth = DB::table('stock_transaction_details')
+            ->join('stock_transactions', 'stock_transactions.stock_transaction_id', '=', 'stock_transaction_details.stock_transaction_id')
+            ->join('products', 'products.product_id', '=', 'stock_transaction_details.product_id')
+            ->where('stock_transactions.type', 'out')
+            ->whereMonth('stock_transactions.date', Carbon::now()->format('m'))
+            ->select('products.product_id', 'products.product_name', 'products.product_code', 'products.price', DB::raw('SUM(stock_transaction_details.qty) as total_sold'))
+            ->groupBy('products.product_id', 'products.product_name', 'products.product_code', 'products.price')
+            ->get();
+        
+        $totalSoldProductThisYear = DB::table('stock_transaction_details')
+            ->join('stock_transactions', 'stock_transactions.stock_transaction_id', '=', 'stock_transaction_details.stock_transaction_id')
+            ->join('products', 'products.product_id', '=', 'stock_transaction_details.product_id')
+            ->where('stock_transactions.type', 'out')
+            ->whereYear('stock_transactions.date', Carbon::now()->format('Y'))
+            ->select('products.product_id', 'products.product_name', 'products.product_code', 'products.price', DB::raw('SUM(stock_transaction_details.qty) as total_sold'))
+            ->groupBy('products.product_id', 'products.product_name', 'products.product_code', 'products.price')
+            ->get();
+
+
+
+        return view('page/report/report', compact([
+            'months', 
+            'incomeData', 
+            'outcomeData', 
+            'totalIncome', 
+            'totalOutcome', 
+            'totalProduct',
+            'totalSoldProductThisMonth',
+            'totalSoldProductThisYear'
+        ]));
     }
+
+    public function preview(){
+        return view('page/report/pdf/report_pdf');
+    }
+
+    public function exportPdf()
+    {
+        $pdf = PDF::loadview('page/report/pdf/report_pdf');
+        return $pdf->download('report-pdf');
+    }
+    
+    
 }

@@ -65,10 +65,19 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
         Route::get('/cashier/cashier-home', 'CashierController@cashier')->name('cashier.cashier-home');
         Route::get('/cashier/cashier-get-product-detail/{id}', 'CashierController@getProductDetail')->name('cashier.cashier-get-product-detail');
         Route::get('/cashier/cashier-get-product-detail-order/{id}', 'CashierController@getProductDetailOrder')->name('cashier.cashier-get-product-detail-order');
-
         Route::get('/cashier/cashier-purchase-order', 'CashierController@purchaseOrder');
+
+        // User Management
+        Route::get('/user-management/user-management', 'UserManagementController@userManagement')->name('user-management.user-management-home');
+        Route::get('/user-management/add-user', 'UserManagementController@addUser');
+        Route::get('/user-management/edit-user-data/{id}', 'UserManagementController@editUser');
+        Route::get('/user-management/update-user-data/{id}', 'UserManagementController@updateUser');
+        Route::get('/user-management/delete-user/{id}', 'UserManagementController@deleteUser');
 
         // Report
         Route::get('/report/report-page', 'ReportController@index')->name('report.report-page');
+        // Export PDF
+        Route::get('preview', 'ReportController@preview');
+        Route::get('/report/export/report-pdf', 'ReportController@exportPdf')->name('download');
     });
 });
