@@ -45,7 +45,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
 
         // Product
         Route::get('/product/product-list', 'Product\ProductController@productList')->name('product.product-list');
-        Route::post('/product/product-add', 'Product\ProductController@addProduct')->name('product.product-add');
+        Route::get('/product/product-add', 'Product\ProductController@addProduct')->name('product.product-add');
         Route::get('/product/product-edit/{id}', 'Product\ProductController@editProduct')->name('product.product-edit');
         Route::get('/product/product-update/{id}', 'Product\ProductController@updateProduct')->name('product.product-update');
         Route::get('/product/product-delete/{id}', 'Product\ProductController@deleteProduct')->name('product.product-delete');

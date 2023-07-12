@@ -89,34 +89,31 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ route('product.product-add') }}" method="post">
-                @csrf
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Product</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Product</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Product Category" name="product_category"
+                        id="product_category" required="required" autofocus>
+                    <label for="floatingName">Product Category</label>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group form-floating mb-3">
-                        <input type="text" class="form-control" placeholder="Product Category" name="product_category"
-                            required="required" autofocus>
-                        <label for="floatingName">Product Category</label>
-                    </div>
-                    <div class="form-group form-floating mb-3">
-                        <input type="text" class="form-control" placeholder="Product Name" name="product_name"
-                            required="required" autofocus>
-                        <label for="floatingName">Product Name</label>
-                    </div>
-                    <div class="form-group form-floating mb-3">
-                        <input type="number" class="form-control" placeholder="Product Price" name="product_price"
-                            required="required" autofocus>
-                        <label for="floatingName">Price</label>
-                    </div>
+                <div class="form-group form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Product Name" name="product_name"
+                        id="product_name" required="required" autofocus>
+                    <label for="floatingName">Product Name</label>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Product</button>
+                <div class="form-group form-floating mb-3">
+                    <input type="text" class="form-control" placeholder="Product Price" name="product_price"
+                        id="product_price" required="required" autofocus>
+                    <label for="floatingName">Price</label>
                 </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary" onClick="addProduct()">Tambah Produk</button>
+            </div>
         </div>
     </div>
 </div>
@@ -215,6 +212,38 @@ $(document).ready(function() {
 
 // Other Function
 
+// Add Product
+function addProduct() {
+    $.ajax({
+        type: 'GET',
+        url: '{{ url("/product/product-add") }}',
+        data: {
+            product_category: $('#product_category').val(),
+            product_name: $('#product_name').val(),
+            product_price: parseInt($('#product_price').val())
+        },
+        success: function(data) {
+            $("#exampleModal").modal('hide');
+            Swal.fire({
+                title: 'Data produk berhasil ditambahkan!',
+                text: "Data berhasil ditambahkan!",
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonColor: '#cb0c9f',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Tutup',
+                cancelButtonText: 'No'
+            }).then(() => {
+                window.location.reload()
+            }); 
+        },
+        error: function(err) {
+            console.log(err);
+        }
+
+    });
+}
+
 // Edit Product
 function editProduct(id) {
     $.get("{{ url('/product/product-edit') }}/" + id, {}, function(data, status) {
@@ -235,7 +264,18 @@ function updateProduct(id) {
         },
         success: function(data) {
             $("#exampleModal2").modal('hide');
-            window.location.reload();
+            Swal.fire({
+                title: 'Data produk berhasil diperbarui!',
+                text: "Data berhasil diperbarui!",
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonColor: '#cb0c9f',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Tutup',
+                cancelButtonText: 'No'
+            }).then(() => {
+                window.location.reload()
+            });
         },
         error: function(err) {
             console.log(err);
@@ -256,8 +296,19 @@ function deleteProduct(id) {
         cancelButtonText: 'Tidak'
     }).then((result) => {
         if (result.isConfirmed) {
-            url = "/product/product-delete/" + id;
-            window.location.href = url;
+            Swal.fire({
+                title: 'Produk berhasil dihapus!',
+                text: "Produk berhasil dihapus dari database!",
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonColor: '#cb0c9f',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Tutup',
+                cancelButtonText: 'No'
+            }).then(() => {
+                url = "/product/product-delete/" + id;
+                window.location.href = url;
+            });
         }
     })
 }

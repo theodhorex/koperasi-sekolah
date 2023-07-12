@@ -30,9 +30,9 @@ class ProductController extends Controller
 
         $product = new Product;
         $product -> product_id = Uuid::generate(4);
-        $product -> product_code = $request->product_category . '-' . $random_code;
-        $product -> product_name = $request->product_name;
-        $product -> price = $request->product_price;
+        $product -> product_code = $request -> product_category . '-' . $random_code;
+        $product -> product_name = $request -> product_name;
+        $product -> price = $request -> product_price;
         $product -> save();
 
         // Get product id
