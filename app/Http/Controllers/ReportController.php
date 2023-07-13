@@ -65,7 +65,7 @@ class ReportController extends Controller
             ->whereDate('stock_transactions.date', Carbon::now())
             ->select('products.product_id', 'products.product_name', 'products.product_code', 'products.price', DB::raw('SUM(stock_transaction_details.qty) as total_sold'))
             ->groupBy('products.product_id', 'products.product_name', 'products.product_code', 'products.price')
-            ->get();
+            ->paginate(10);
 
         $totalSoldProductThisMonth = DB::table('stock_transaction_details')
             ->join('stock_transactions', 'stock_transactions.stock_transaction_id', '=', 'stock_transaction_details.stock_transaction_id')
@@ -74,7 +74,7 @@ class ReportController extends Controller
             ->whereMonth('stock_transactions.date', Carbon::now()->format('m'))
             ->select('products.product_id', 'products.product_name', 'products.product_code', 'products.price', DB::raw('SUM(stock_transaction_details.qty) as total_sold'))
             ->groupBy('products.product_id', 'products.product_name', 'products.product_code', 'products.price')
-            ->get();
+            ->paginate(10);
         
         $totalSoldProductThisYear = DB::table('stock_transaction_details')
             ->join('stock_transactions', 'stock_transactions.stock_transaction_id', '=', 'stock_transaction_details.stock_transaction_id')
@@ -83,7 +83,7 @@ class ReportController extends Controller
             ->whereYear('stock_transactions.date', Carbon::now()->format('Y'))
             ->select('products.product_id', 'products.product_name', 'products.product_code', 'products.price', DB::raw('SUM(stock_transaction_details.qty) as total_sold'))
             ->groupBy('products.product_id', 'products.product_name', 'products.product_code', 'products.price')
-            ->get();
+            ->paginate(10);
 
 
 
@@ -110,5 +110,43 @@ class ReportController extends Controller
         return $pdf->download('report-pdf');
     }
     
-    
+    // Sold Product Page Detail
+    public function totalSoldProductToday(){
+        $totalSoldProductToday = DB::table('stock_transaction_details')
+            ->join('stock_transactions', 'stock_transactions.stock_transaction_id', '=', 'stock_transaction_details.stock_transaction_id')
+            ->join('products', 'products.product_id', '=', 'stock_transaction_details.product_id')
+            ->where('stock_transactions.type', 'out')
+            ->whereDate('stock_transactions.date', Carbon::now())
+            ->select('products.product_id', 'products.product_name', 'products.product_code', 'products.price', DB::raw('SUM(stock_transaction_details.qty) as total_sold'))
+            ->groupBy('products.product_id', 'products.product_name', 'products.product_code', 'products.price')
+            ->get();
+
+        return view('page/ajax/report/totalSoldProductToday', compact('totalSoldProductToday'));
+    }
+
+    public function totalSoldProductThisMonth(){
+        $totalSoldProductThisMonth = DB::table('stock_transaction_details')
+            ->join('stock_transactions', 'stock_transactions.stock_transaction_id', '=', 'stock_transaction_details.stock_transaction_id')
+            ->join('products', 'products.product_id', '=', 'stock_transaction_details.product_id')
+            ->where('stock_transactions.type', 'out')
+            ->whereMonth('stock_transactions.date', Carbon::now()->format('m'))
+            ->select('products.product_id', 'products.product_name', 'products.product_code', 'products.price', DB::raw('SUM(stock_transaction_details.qty) as total_sold'))
+            ->groupBy('products.product_id', 'products.product_name', 'products.product_code', 'products.price')
+            ->get();
+        
+        return view('page/ajax/report/totalSoldProductThisMonth', compact('totalSoldProductThisMonth'));
+    }
+
+    public function totalSoldProductThisYear(){
+        $totalSoldProductThisYear = DB::table('stock_transaction_details')
+            ->join('stock_transactions', 'stock_transactions.stock_transaction_id', '=', 'stock_transaction_details.stock_transaction_id')
+            ->join('products', 'products.product_id', '=', 'stock_transaction_details.product_id')
+            ->where('stock_transactions.type', 'out')
+            ->whereYear('stock_transactions.date', Carbon::now()->format('Y'))
+            ->select('products.product_id', 'products.product_name', 'products.product_code', 'products.price', DB::raw('SUM(stock_transaction_details.qty) as total_sold'))
+            ->groupBy('products.product_id', 'products.product_name', 'products.product_code', 'products.price')
+            ->get();
+
+        return view('page/ajax/report/totalSoldProductThisYear', compact('totalSoldProductThisYear'));
+    }
 }

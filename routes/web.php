@@ -76,6 +76,12 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
 
         // Report
         Route::get('/report/report-page', 'ReportController@index')->name('report.report-page');
+
+        // Report Sold Product Detail
+        Route::get('/report/report-totalsolditemtoday', 'ReportController@totalSoldProductToday');
+        Route::get('/report/report-totalsolditemthismonth', 'ReportController@totalSoldProductThisMonth');
+        Route::get('/report/report-totalsolditemthisyear', 'ReportController@totalSoldProductThisYear');
+        
         // Export PDF
         Route::get('preview', 'ReportController@preview');
         Route::get('/report/export/report-pdf', 'ReportController@exportPdf')->name('download');

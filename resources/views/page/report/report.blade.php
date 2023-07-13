@@ -83,7 +83,7 @@
 
     <!-- Chart -->
     <div id="target" class="row px-2">
-        <div class="col border border-tertiary rounded p-4">
+        <div class="col border border-tertiary rounded shadow-sm p-4">
             <h3 class="fw-semibold mb-2">Diagram data rugi laba tahun {{ date('Y') }}</h3>
             <h5 class="fw-semibold mb-1">Cetak data</h5>
             <div class="row mb-4">
@@ -95,7 +95,14 @@
             <canvas class="mb-5" id="chartTarget"></canvas>
 
             <!-- Daily data -->
-            <h4 class="fw-semibold mb-3">Data barang yang terjual hari ini</h4>
+            <div class="row">
+                <div class="col">
+                    <h4 class="fw-semibold mb-3">Data barang yang terjual hari ini</h4>
+                </div>
+                <div class="col">
+                    <a href="{{ url('/report/report-totalsolditemtoday') }}" class="btn btn-sm btn-primary fw-semibold float-end">Lihat semua</a>
+                </div>
+            </div>
             <table class="table table-bordered mb-5">
                 <thead>
                     <tr>
@@ -128,15 +135,22 @@
                         </td>
                     </tr>
                     @endforeach
-                    <tr>
+                    <!-- <tr>
                         <th colspan="5">Total Subtotal:</th>
                         <td>Rp. {{ number_format($todayTotalSubtotal, 2, ',', '.') }}</td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
             
             <!-- Monthly data -->
-            <h4 class="fw-semibold mb-3">Data barang yang terjual bulan {{ date('F') }}</h4>
+            <div class="row">
+                <div class="col">
+                    <h4 class="fw-semibold mb-3">Data barang yang terjual bulan {{ date('F') }}</h4>
+                </div>
+                <div class="col">
+                    <a href="{{ url('/report/report-totalsolditemthismonth') }}" class="btn btn-sm btn-primary fw-semibold float-end">Lihat Semua</a>
+                </div>
+            </div>
             <table class="table table-bordered mb-5">
                 <thead>
                     <tr>
@@ -167,15 +181,22 @@
                         <td>Rp. {{ number_format($totalProductSoldThisMonths -> total_sold * $totalProductSoldThisMonths -> price, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
-                    <tr>
+                    <!-- <tr>
                         <th colspan="5">Total Subtotal:</th>
                         <td>Rp. {{ number_format($thisMonthTotalSubtotal, 2, ',', '.') }}</td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
 
             <!-- Yearly data -->
-            <h4 class="fw-semibold mb-3">Data barang yang terjual di tahun {{ date('Y') }}</h4>
+            <div class="row">
+                <div class="col">
+                    <h4 class="fw-semibold mb-3">Data barang yang terjual di tahun {{ date('Y') }}</h4>
+                </div>
+                <div class="col">
+                    <a href="{{ url('/report/report-totalsolditemthisyear') }}" class="btn btn-sm btn-primary fw-semibold float-end">Lihat Semua</a>
+                </div>
+            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -206,10 +227,10 @@
                         <td>Rp. {{ number_format($totalSoldProductThisYears -> total_sold * $totalSoldProductThisYears -> price, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
-                    <tr>
+                    <!-- <tr>
                         <th colspan="5">Total Subtotal:</th>
                         <td>Rp. {{ number_format($thisYearTotalSubtotal, 2, ',', '.') }}</td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
