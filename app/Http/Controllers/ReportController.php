@@ -58,6 +58,14 @@ class ReportController extends Controller
 
         $totalProduct = Product::all()->count();
 
+        $totalSoldProductToday = DB::table('stock_transaction_details')
+            ->join('stock_transactions', 'stock_transactions.stock_transaction_id', '=', 'stock_transaction_details.stock_transaction_id')
+            ->join('products', 'products.product_id', '=', 'stock_transaction_details.product_id')
+            ->where('stock_transactions.type', 'out')
+            ->whereDate('stock_transactions.date', Carbon::now())
+            ->select('products.product_id', 'products.product_name', 'products.product_code', 'products.price', DB::raw('SUM(stock_transaction_details.qty) as total_sold'))
+            ->groupBy('products.product_id', 'products.product_name', 'products.product_code', 'products.price')
+            ->get();
 
         $totalSoldProductThisMonth = DB::table('stock_transaction_details')
             ->join('stock_transactions', 'stock_transactions.stock_transaction_id', '=', 'stock_transaction_details.stock_transaction_id')
@@ -86,6 +94,7 @@ class ReportController extends Controller
             'totalIncome', 
             'totalOutcome', 
             'totalProduct',
+            'totalSoldProductToday',
             'totalSoldProductThisMonth',
             'totalSoldProductThisYear'
         ]));

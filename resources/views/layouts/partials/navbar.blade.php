@@ -58,6 +58,7 @@
                             Kasir
                         </a>
                     </li>
+                    @if(Auth::user() -> role == 'admin')
                     <li class="nav-item dropdown">
                         <a id="userManagement" href="{{ url('/user-management/user-management') }}" class="nav-link">
                             Manajemen Pengguna
@@ -93,6 +94,7 @@
                             <li><a class="dropdown-item" href="#">Laporan detail penjualan produk</a></li>
                         </ul>
                     </li>
+                    @endif
                     @endauth
                 </ul>
                 <div class="float-start my-2">

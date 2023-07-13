@@ -9,49 +9,118 @@
             <h4>Laporan Bulan Ini</h4>
         </div>
         <div class="col">
-            <h4 class="float-end"><a class="btn btn-primary fw-semibold" href="{{ url('/report/report-page') }}">Lihat Selengkapnya</a></h4>
+            @if(Auth::user() -> role == 'admin')
+            <h4 class="float-end"><a class="btn btn-primary fw-semibold" href="{{ url('/report/report-page') }}">Lihat
+                    Selengkapnya</a></h4>
+            @endif
         </div>
     </div>
     <canvas class="mb-5" id="chartTarget"></canvas>
+
+    @if(Auth::user()->role=='petugas')
+    <!-- Daily data -->
+    <h4 class="fw-semibold mb-3">Data barang yang terjual hari ini</h4>
+    <table class="table table-bordered mb-5">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Kode Barang</th>
+                <th scope="col">Nama Barang</th>
+                <th scope="col">Harga</th>
+                <th scope="col">Terjual</th>
+                <th scope="col">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+            $num = 1;
+            @endphp
+            @foreach($totalSoldProductToday as $totalSoldProductTodays)
+            <tr>
+                <th class="nowrap" scope="row">{{ $num++ }}</th>
+                <td>{{ $totalSoldProductTodays -> product_code }}</td>
+                <td>{{ $totalSoldProductTodays -> product_name }}</td>
+                <td>Rp. {{ number_format($totalSoldProductTodays -> price, 2, ',', '.') }}</td>
+                <td>{{ $totalSoldProductTodays -> total_sold }}</td>
+                <td>Rp.
+                    {{ number_format($totalSoldProductTodays -> total_sold * $totalSoldProductTodays -> price, 2, ',', '.') }}
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Monthly data -->
+    <h4 class="fw-semibold mb-3">Data barang yang terjual bulan {{ date('F') }}</h4>
+    <table class="table table-bordered mb-5">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Kode Barang</th>
+                <th scope="col">Nama Barang</th>
+                <th scope="col">Harga</th>
+                <th scope="col">Terjual</th>
+                <th scope="col">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+            $num = 1;
+            @endphp
+            @foreach($totalSoldProductThisMonth as $totalProductSoldThisMonths)
+            <tr>
+                <th class="nowrap" scope="row">{{ $num++ }}</th>
+                <td>{{ $totalProductSoldThisMonths -> product_code }}</td>
+                <td>{{ $totalProductSoldThisMonths -> product_name }}</td>
+                <td>Rp. {{ number_format($totalProductSoldThisMonths -> price, 2, ',', '.') }}</td>
+                <td>{{ $totalProductSoldThisMonths -> total_sold }}</td>
+                <td>Rp.
+                    {{ number_format($totalProductSoldThisMonths -> total_sold * $totalProductSoldThisMonths -> price, 2, ',', '.') }}
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @endif
     @endauth
 
 
     <script>
-        var months = {!!json_encode($months) !!};
-        var incomeData = {!!json_encode($incomeData) !!};
-        var outcomeData = {!!json_encode($outcomeData) !!};
+    var months = {!!json_encode($months) !!};
+    var incomeData = {!!json_encode($incomeData) !!};
+    var outcomeData = {!!json_encode($outcomeData) !!};
 
-        var ctx = document.getElementById('chartTarget').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: months,
-                datasets: [{
-                        label: 'Pemasukan',
-                        data: incomeData,
-                        backgroundColor: 'aqua',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                        fill: false
-                    },
-                    {
-                        label: 'Pengeluaran',
-                        data: outcomeData,
-                        backgroundColor: 'red',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1,
-                        fill: false
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+    var ctx = document.getElementById('chartTarget').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: months,
+            datasets: [{
+                    label: 'Pemasukan',
+                    data: incomeData,
+                    backgroundColor: 'aqua',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: false
+                },
+                {
+                    label: 'Pengeluaran',
+                    data: outcomeData,
+                    backgroundColor: 'red',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
     </script>
 </div>
 @endsection
@@ -68,7 +137,7 @@
 
             <h3 class="mb-3 fw-semibold text-center">Login</h3>
 
-            
+
             <div class="row">
                 <div class="col-4 d-block mx-auto">
                     @include('layouts.partials.messages')
@@ -97,4 +166,3 @@
     </div>
 </div>
 @endguest
-

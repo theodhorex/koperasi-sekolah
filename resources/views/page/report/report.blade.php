@@ -94,6 +94,47 @@
             </div>
             <canvas class="mb-5" id="chartTarget"></canvas>
 
+            <!-- Daily data -->
+            <h4 class="fw-semibold mb-3">Data barang yang terjual hari ini</h4>
+            <table class="table table-bordered mb-5">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Kode Barang</th>
+                        <th scope="col">Nama Barang</th>
+                        <th scope="col">Harga</th>
+                        <th scope="col">Terjual</th>
+                        <th scope="col">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                    $num = 1;
+                    $todayTotalSubtotal = 0;
+                    @endphp
+                    @foreach($totalSoldProductToday as $totalSoldProductTodays)
+                    @php
+                    $todaySubtotal = $totalSoldProductTodays->total_sold * $totalSoldProductTodays->price;
+                    $todayTotalSubtotal += $todaySubtotal;
+                    @endphp
+                    <tr>
+                        <th class="nowrap" scope="row">{{ $num++ }}</th>
+                        <td>{{ $totalSoldProductTodays -> product_code }}</td>
+                        <td>{{ $totalSoldProductTodays -> product_name }}</td>
+                        <td>Rp. {{ number_format($totalSoldProductTodays -> price, 2, ',', '.') }}</td>
+                        <td>{{ $totalSoldProductTodays -> total_sold }}</td>
+                        <td>Rp.
+                            {{ number_format($totalSoldProductTodays -> total_sold * $totalSoldProductTodays -> price, 2, ',', '.') }}
+                        </td>
+                    </tr>
+                    @endforeach
+                    <tr>
+                        <th colspan="5">Total Subtotal:</th>
+                        <td>Rp. {{ number_format($todayTotalSubtotal, 2, ',', '.') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
             <!-- Monthly data -->
             <h4 class="fw-semibold mb-3">Data barang yang terjual bulan {{ date('F') }}</h4>
             <table class="table table-bordered mb-5">
@@ -110,8 +151,13 @@
                 <tbody>
                     @php
                     $num = 1;
+                    $thisMonthTotalSubtotal = 0;
                     @endphp
                     @foreach($totalSoldProductThisMonth as $totalProductSoldThisMonths)
+                    @php
+                    $subtotal = $totalProductSoldThisMonths->total_sold * $totalProductSoldThisMonths->price;
+                    $thisMonthTotalSubtotal += $subtotal;
+                    @endphp
                     <tr>
                         <th class="nowrap" scope="row">{{ $num++ }}</th>
                         <td>{{ $totalProductSoldThisMonths -> product_code }}</td>
@@ -121,6 +167,10 @@
                         <td>Rp. {{ number_format($totalProductSoldThisMonths -> total_sold * $totalProductSoldThisMonths -> price, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
+                    <tr>
+                        <th colspan="5">Total Subtotal:</th>
+                        <td>Rp. {{ number_format($thisMonthTotalSubtotal, 2, ',', '.') }}</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -140,8 +190,13 @@
                 <tbody>
                     @php
                     $num = 1;
+                    $thisYearTotalSubtotal = 0;
                     @endphp
                     @foreach($totalSoldProductThisYear as $totalSoldProductThisYears)
+                    @php
+                    $yearlySubtotal = $totalSoldProductThisYears->total_sold * $totalSoldProductThisYears->price;
+                    $thisYearTotalSubtotal += $yearlySubtotal;
+                    @endphp
                     <tr>
                         <th class="nowrap" scope="row">{{ $num++ }}</th>
                         <td>{{ $totalSoldProductThisYears -> product_code }}</td>
@@ -151,6 +206,10 @@
                         <td>Rp. {{ number_format($totalSoldProductThisYears -> total_sold * $totalSoldProductThisYears -> price, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
+                    <tr>
+                        <th colspan="5">Total Subtotal:</th>
+                        <td>Rp. {{ number_format($thisYearTotalSubtotal, 2, ',', '.') }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
