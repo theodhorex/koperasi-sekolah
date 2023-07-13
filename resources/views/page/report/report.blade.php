@@ -135,10 +135,6 @@
                         </td>
                     </tr>
                     @endforeach
-                    <!-- <tr>
-                        <th colspan="5">Total Subtotal:</th>
-                        <td>Rp. {{ number_format($todayTotalSubtotal, 2, ',', '.') }}</td>
-                    </tr> -->
                 </tbody>
             </table>
             
@@ -181,10 +177,6 @@
                         <td>Rp. {{ number_format($totalProductSoldThisMonths -> total_sold * $totalProductSoldThisMonths -> price, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
-                    <!-- <tr>
-                        <th colspan="5">Total Subtotal:</th>
-                        <td>Rp. {{ number_format($thisMonthTotalSubtotal, 2, ',', '.') }}</td>
-                    </tr> -->
                 </tbody>
             </table>
 
@@ -227,10 +219,6 @@
                         <td>Rp. {{ number_format($totalSoldProductThisYears -> total_sold * $totalSoldProductThisYears -> price, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
-                    <!-- <tr>
-                        <th colspan="5">Total Subtotal:</th>
-                        <td>Rp. {{ number_format($thisYearTotalSubtotal, 2, ',', '.') }}</td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>

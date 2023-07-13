@@ -1,7 +1,17 @@
 @extends('layouts.app-master')
 
 @section('content')
-<div class="py-5 rounded">
+<head>
+    <style>
+        #target1{
+            overflow: hidden;
+        }
+        #target2{
+            overflow: hidden;
+        }
+    </style>
+</head>
+<div id="target1" class="py-5 rounded">
     @auth
     <h2 class="fw-semibold mb-4">Selamat datang {{ Auth::user()->username }}</h2>
     <div class="row">
@@ -126,16 +136,17 @@
 @endsection
 
 @guest
-<div class="row py-5 px-5">
+<div id="target2" class="row py-5 px-0 mx-0">
     <div class="col">
-        <img style="width: 150px;" class="d-block mx-auto"
-            src="https://www.freeiconspng.com/thumbs/logo-design/blank-bird-logo-design-idea-png-15.png" alt="">
-        <h2 class="fw-bold text-center">Koperasi Usaha Bersama</h2>
+        <div style="max-width: 270px;" class="embed-responsive embed-responsive-16by9 d-block mx-auto">
+            <img class="d-block mx-auto img-fluid embed-responsive-item"
+                src="{{ asset('images/logo KUB.png') }}" alt="">
+        </div>
         <form class="py-4 px-4 rounded-3" method="post" action="{{ route('login.perform') }}">
 
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
 
-            <h3 class="mb-3 fw-semibold text-center">Login</h3>
+            <h3 class="mb-3 fw-bold text-center">Login</h3>
 
 
             <div class="row">

@@ -83,7 +83,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
         Route::get('/report/report-totalsolditemthisyear', 'ReportController@totalSoldProductThisYear');
         
         // Export PDF
-        Route::get('preview', 'ReportController@preview');
         Route::get('/report/export/report-pdf', 'ReportController@exportPdf')->name('download');
     });
 });
