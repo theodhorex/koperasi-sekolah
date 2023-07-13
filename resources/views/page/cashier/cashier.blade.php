@@ -5,33 +5,37 @@
         <div class="col-md-8 pe-5">
             <h4 class="fw-semibold d-inline-flex mb-0">Produk</h4>
             <hr>
-            @foreach($product as $products)
-            <div class="row p-2">
-                <div class="card shadow-sm rounded">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                @php
-                                $category = explode('-', $products->product->product_code)[0];
-                                @endphp
-                                <h5 class="card-title fw-semibold mb-0">{{ $category }} -
-                                    {{ $products->product->product_name }}
-                                </h5>
-                            </div>
-                            <div class="col">
-                                <h5 class="mb-0 fw-semibold float-end">Rp.
-                                    {{ number_format($products->product->price, 2, ',', '.') }}
-                                    <span class="material-icons mb-0 ms-3 cursor-pointer float-end"
-                                        onClick="getProductDetail('{{ $products->product_id }}')">
-                                        playlist_add
-                                    </span>
-                                </h5>
+            <div class="row" style="height: 70vh; overflow-y: scroll;">
+                <div class="col">
+                    @foreach($product as $products)
+                    <div class="row p-2">
+                        <div class="card shadow-sm rounded">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        @php
+                                        $category = explode('-', $products->product->product_code)[0];
+                                        @endphp
+                                        <h5 class="card-title fw-semibold mb-0">{{ $category }} -
+                                            {{ $products->product->product_name }}
+                                        </h5>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="mb-0 fw-semibold float-end">Rp.
+                                            {{ number_format($products->product->price, 2, ',', '.') }}
+                                            <span class="material-icons mb-0 ms-3 cursor-pointer float-end"
+                                                onClick="getProductDetail('{{ $products->product_id }}')">
+                                                playlist_add
+                                            </span>
+                                        </h5>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
-            @endforeach
         </div>
         <div class="col-md-4 shadow p-3 px-4 bg-body-tertiary rounded">
             <div class="row">
@@ -47,8 +51,10 @@
                 </div>
             </div>
             <hr>
-            <div id="shopping_cart_view">
+            <div class="row">
+            <div class="col" id="shopping_cart_view" style="height: 35vh; overflow-y: scroll">
                 <h5 class="fw-semibold text-center my-5">Belum ada produk di keranjang</h5>
+            </div>
             </div>
 
             <hr>
@@ -272,7 +278,7 @@ function updateShoppingCart(target) {
     $('#shopping_cart_view').empty();
     for (let i = 0; i < shoppingCart.length; i++) {
         let data = `
-                    <div class="row mb-2">
+                    <div class="row mb-3">
                         <div class="col">
                             <div class="row">
                                 <div class="col">

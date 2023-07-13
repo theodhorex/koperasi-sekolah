@@ -235,7 +235,7 @@ function addProduct() {
                 cancelButtonText: 'No'
             }).then(() => {
                 window.location.reload()
-            }); 
+            });
         },
         error: function(err) {
             console.log(err);

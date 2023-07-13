@@ -27,7 +27,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 100;
+            z-index: 100000000;
         }
         .dropdown {
             z-index: 1001; /* Menambahkan z-index yang lebih tinggi */
