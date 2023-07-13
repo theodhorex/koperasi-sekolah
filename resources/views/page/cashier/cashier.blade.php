@@ -1,11 +1,23 @@
 @extends('layouts.app-master')
 @section('content')
+
+<head>
+    <style>
+    #itemList::-webkit-scrollbar {
+        display: none;
+    }
+
+    #shopping_cart_view::-webkit-scrollbar {
+        display: none;
+    }
+    </style>
+</head>
 <div class="py-5 rounded">
     <div class="row">
-        <div class="col-md-8 pe-5">
+        <div class="col-md-8 pe-5" style="overflow: hidden;">
             <h4 class="fw-semibold d-inline-flex mb-0">Produk</h4>
             <hr>
-            <div class="row" style="height: 70vh; overflow-y: scroll;">
+            <div class="row" id="itemList" style="height: 70vh; overflow-y: scroll; scrollbar-width: none;">
                 <div class="col">
                     @foreach($product as $products)
                     <div class="row p-2">
@@ -52,9 +64,10 @@
             </div>
             <hr>
             <div class="row">
-            <div class="col" id="shopping_cart_view" style="height: 35vh; overflow-y: scroll">
-                <h5 class="fw-semibold text-center my-5">Belum ada produk di keranjang</h5>
-            </div>
+                <div class="col" id="shopping_cart_view"
+                    style="height: 35vh; overflow-y: scroll; scrollbar-width: none;">
+                    <h5 class="fw-semibold text-center my-5">Belum ada produk di keranjang</h5>
+                </div>
             </div>
 
             <hr>
