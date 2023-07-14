@@ -39,8 +39,10 @@
                             <th scope="col">Kode Produk</th>
                             <th scope="col">Nama Produk</th>
                             <th scope="col">Stok / Pcs</th>
-                            <th scope="col">Diupdate pada</th>
+                            <th scope="col" class="@if(Auth::user() -> role == 'viewer') nowrap @endif">Diupdate pada</th>
+                            @if(Auth::user() -> role != 'viewer')
                             <th class="nowrap text-center" scope="col">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody id="filter_target">
@@ -54,10 +56,12 @@
                             <td>{{$product->product->product_name}}</td>
                             <td>{{$product->qty}}</td>
                             <td>{{ ($product->created_at)->format('j F Y') }}</td>
+                            @if(Auth::user() -> role != 'viewer')
                             <td class="nowrap">
                                 <a onClick="editProductStock('{{ $product->product->product_id }}')"
                                     class="btn btn-warning fw-semibold">Edit</a>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

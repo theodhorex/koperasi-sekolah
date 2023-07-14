@@ -29,13 +29,14 @@
                                         </select>
                                     </div>
                                 </div>
+                                @if(Auth::user() -> role == 'Admin')
                                 <div class="col-md">
                                     <button type="button" class="btn btn-primary fw-semibold w-100"
                                         data-bs-toggle="modal" data-bs-target="#exampleModal">
                                         Tambah Produk
                                     </button>
-
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -52,8 +53,10 @@
                             <th scope="col">Kode Produk</th>
                             <th scope="col">Nama Produk</th>
                             <th scope="col">Harga</th>
-                            <th scope="col">Ditambahkan pada</th>
+                            <th scope="col" class="@if(Auth::user() -> role != 'admin')nowrap @endif">Ditambahkan pada</th>
+                            @if(Auth::user() -> role == 'admin')
                             <th class="nowrap text-center" scope="col">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody id="filter_target">
@@ -68,12 +71,14 @@
                                 <td>{{ $product->product_name }}</td>
                                 <td>Rp. {{ number_format($product->price, 2, ',', '.') }}</td>
                                 <td>{{ ($product->created_at)->format('j F Y') }}</td>
+                                @if(Auth::user() -> role == 'admin')
                                 <td class="nowrap">
                                     <a onClick="editProduct('{{ $product->product_id }}')"
                                         class="btn btn-warning fw-semibold">Edit</a>
                                     <a onClick="deleteProduct('{{ $product->product_id }}')"
                                         class="btn btn-danger fw-semibold">Hapus</a>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         </div>
@@ -97,17 +102,17 @@
                 <div class="form-group form-floating mb-3">
                     <input type="text" class="form-control" placeholder="Product Category" name="product_category"
                         id="product_category" required="required" autofocus>
-                    <label for="floatingName">Product Category</label>
+                    <label for="floatingName">Kategori Produk</label>
                 </div>
                 <div class="form-group form-floating mb-3">
                     <input type="text" class="form-control" placeholder="Product Name" name="product_name"
                         id="product_name" required="required" autofocus>
-                    <label for="floatingName">Product Name</label>
+                    <label for="floatingName">Nama Produk</label>
                 </div>
                 <div class="form-group form-floating mb-3">
                     <input type="text" class="form-control" placeholder="Product Price" name="product_price"
                         id="product_price" required="required" autofocus>
-                    <label for="floatingName">Price</label>
+                    <label for="floatingName">Harga</label>
                 </div>
             </div>
             <div class="modal-footer">

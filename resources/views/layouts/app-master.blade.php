@@ -8,7 +8,7 @@
     <script src="{{ asset('assets/chart js/chart.umd.min.js') }}"></script>
     <script src="{{ asset('assets/moment/moment-with-locales.js') }}"></script>
     <script src="{{ asset('assets/html2canvas/html2canvas.min.js') }}"></script>
-    <link rel="icon" href="https://www.freeiconspng.com/thumbs/logo-design/blank-bird-logo-design-idea-png-15.png" type="image/x-icon">
+    <link rel="icon" href="{{ asset('images/logo KUB.png') }}" type="image/x-icon">
     <title>Koperasi Usaha Bersama</title>
 
     <!-- Material Icon -->

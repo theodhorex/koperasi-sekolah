@@ -15,6 +15,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Nama</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Level</th>
                         <th scope="col">Dibuat pada</th>
                         <th scope="col" class="text-center">Aksi</th>
@@ -28,6 +29,7 @@
                     <tr>
                         <th scope="row" class="nowrap">{{ $i++ }}</th>
                         <td>{{ $data->username }}</td>
+                        <td>{{ $data->email }}</td>
                         <td>{{ ucfirst($data->role) }}</td>
                         <td>{{ ($data->created_at)->format('j F Y') }}</td>
                         <td class="nowrap">
