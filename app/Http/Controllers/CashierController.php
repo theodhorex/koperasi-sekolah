@@ -21,6 +21,17 @@ class CashierController extends Controller
         return view('page/cashier/cashier', compact(['product']));
     }
 
+    public function searchProduct(Request $request){
+        $result = DB::table('products')
+            ->join('product_stocks', 'products.product_id', '=', 'product_stocks.product_id')
+            ->where('product_stocks.qty', '!=', 0)
+            ->where('products.product_name', 'LIKE', '%' . $request->name . '%')
+            ->orderBy('products.created_at', 'desc')
+            ->get();
+        
+        return $result;
+    }
+
     public function getProductDetail($id){
         $product = Product::where('product_id', $id)->get();
         $product_stock = ProductStock::where('product_id', $id)->get();

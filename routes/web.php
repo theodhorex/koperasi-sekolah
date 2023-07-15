@@ -63,6 +63,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function()
 
         // Cashier
         Route::get('/cashier/cashier-home', 'CashierController@cashier')->name('cashier.cashier-home');
+        Route::get('/cashier/cashier-search-product', 'CashierController@searchProduct')->name('cashier.cashier-search-product');
         Route::get('/cashier/cashier-get-product-detail/{id}', 'CashierController@getProductDetail')->name('cashier.cashier-get-product-detail');
         Route::get('/cashier/cashier-get-product-detail-order/{id}', 'CashierController@getProductDetailOrder')->name('cashier.cashier-get-product-detail-order');
         Route::get('/cashier/cashier-purchase-order', 'CashierController@purchaseOrder');

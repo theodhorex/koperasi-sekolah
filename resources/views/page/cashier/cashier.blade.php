@@ -10,15 +10,29 @@
     #shopping_cart_view::-webkit-scrollbar {
         display: none;
     }
+
+    .remove-focus:focus {
+        outline: none;
+        box-shadow: none;
+        color: black;
+    }
     </style>
 </head>
 <div class="py-5 rounded">
     <div class="row">
         <div class="col-md-8 pe-5" style="overflow: hidden;">
-            <h4 class="fw-semibold d-inline-flex mb-0">Produk</h4>
+            <div class="row">
+                <div class="col-md-2">
+                    <h4 class="fw-semibold d-inline-flex mb-0">Produk</h4>
+                </div>
+                <div class="col-md">
+                    <input type="text" name="" id="searchBarForProduct" class="form-control remove-focus"
+                        placeholder="Cari produk disini">
+                </div>
+            </div>
             <hr>
             <div class="row" id="itemList" style="height: 70vh; overflow-y: scroll; scrollbar-width: none;">
-                <div class="col">
+                <div class="col" id="searchTarget">
                     @foreach($product as $products)
                     <div class="row p-2">
                         <div class="card shadow-sm rounded">
@@ -260,6 +274,50 @@ $(document).ready(function() {
     if (shoppingCart.length === 0) {
         $('#purchaseOrderButton').addClass('disabled');
     }
+
+    // Function search product
+    $('#searchBarForProduct').on('keyup', function(){
+        $.ajax({
+            type: 'GET',
+            url: '{{ url("/cashier/cashier-search-product") }}',
+            data: {
+                name: $(this).val()
+            },
+            success: function(data){
+                let result = data.map(function(item){
+                    let category = item.product_code.split('-');
+                    return `
+                        <div class="row p-2">
+                            <div class="card shadow-sm rounded">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="card-title fw-semibold mb-0">${category[0]} -
+                                                ${item.product_name}
+                                            </h5>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="mb-0 fw-semibold float-end">Rp.
+                                                ${(item.price / 1000).toFixed(3) + ',' + 00}
+                                                <span class="material-icons mb-0 ms-3 cursor-pointer float-end"
+                                                    onClick="getProductDetail('${item.product_id}')">
+                                                    playlist_add
+                                                </span>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                });
+                $('#searchTarget').html(result);
+            },
+            error: function(err){
+                console.log(err);
+            }
+        });
+    });
 });
 
 function editShoppingCart(param) {

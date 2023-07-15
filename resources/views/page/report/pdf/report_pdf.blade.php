@@ -125,19 +125,25 @@
             <tr>
                 <th>Hari ini: </th>
                 <th>
-                    <p style="float: right; padding: 0; margin: 0;">{{ number_format($totalIncomeToday -> total_income, 2, ',', '.') }}</p>
+                    <p style="float: right; padding: 0; margin: 0;">
+                        @if(isset($totalIncomeToday -> total_income))
+                        Rp. {{ number_format($totalIncomeToday -> total_income, 2, ',', '.') }}
+                        @else
+                        Rp. 0
+                        @endif
+                    </p>
                 </th>
             </tr>
             <tr>
                 <th>Bulan ini: </th>
                 <th>
-                    <p style="float: right; padding: 0; margin: 0;">{{ number_format($totalIncomeThisMonth -> total_income, 2, ',', '.') }}</p>
+                    <p style="float: right; padding: 0; margin: 0;">Rp. {{ number_format($totalIncomeThisMonth -> total_income, 2, ',', '.') }}</p>
                 </th>
             </tr>
             <tr>
                 <th>Tahun ini: </th>
                 <th>
-                    <p style="float: right; padding: 0; margin: 0;">{{ number_format($totalIncomeThisYear -> total_income, 2, ',', '.') }}</p>
+                    <p style="float: right; padding: 0; margin: 0;">Rp. {{ number_format($totalIncomeThisYear -> total_income, 2, ',', '.') }}</p>
                 </th>
             </tr>
             <tr>
@@ -147,19 +153,19 @@
             <tr>
                 <th>Hari ini: </th>
                 <th>
-                    <p style="float: right; padding: 0; margin: 0;">{{ number_format($totalOutcomeThisYear -> total_outcome, 2, ',', '.') }}</p>
+                    <p style="float: right; padding: 0; margin: 0;">Rp. {{ number_format($totalOutcomeThisYear -> total_outcome, 2, ',', '.') }}</p>
                 </th>
             </tr>
             <tr>
                 <th>Bulan ini: </th>
                 <th>
-                    <p style="float: right; padding: 0; margin: 0;">{{ number_format($totalOutcomeThisYear -> total_outcome, 2, ',', '.') }}</p>
+                    <p style="float: right; padding: 0; margin: 0;">Rp. {{ number_format($totalOutcomeThisYear -> total_outcome, 2, ',', '.') }}</p>
                 </th>
             </tr>
             <tr>
                 <th>Tahun ini: </th>
                 <th>
-                    <p style="float: right; padding: 0; margin: 0;">{{ number_format($totalOutcomeThisYear -> total_outcome, 2, ',', '.') }}</p>
+                    <p style="float: right; padding: 0; margin: 0;">Rp. {{ number_format($totalOutcomeThisYear -> total_outcome, 2, ',', '.') }}</p>
                 </th>
             </tr>
             <tr>
